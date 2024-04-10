@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-3">
+            <form class="col"action="" method="post">
+                <ul class="list-group">
+                    {{form.hidden_tag()}}
+                    <li class="list-group-item">
+                        {{form.email.label}} {{form.email()}}
+                    </li>
+                    <li class="list-group-item">
+                        {{form.password.label}} {{form.password()}}
+                    </li>
+                    <li class="list-group-item">
+                        {{form.submit()}}
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+{% endblock %}

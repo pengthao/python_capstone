@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="jumbotron">
+    <div class="col-sm-4">
+        <form action="" method="post">
+            <ul class="list-group">
+                {{form.hidden_tag()}}
+                <li class="list-group-item">
+                    {{form.search_term.label}} {{form.search_term()}}
+                </li>
+                <li class="list-group-item">
+                    {{form.search_location.label}} {{form.search_location()}}
+                </li>
+                <li class="list-group-item">
+                    {{form.search_radius.label}} {{form.search_radius()}}
+                </li>
+                <li class="list-group-item">
+                    {{form.submit()}}
+                </li>
+            </ul>
+        </form>
+    </div>
+
+    <br>
+    <img class="container mx-auto" src="https://tinyurl.com/2x8wfv2x" alt="Job Hunt">
+</div>
+{% endblock %}

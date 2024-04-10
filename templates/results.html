@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="jumbotron container-fluid row flex">
+    <h1>Search Results</h1>
+
+    <div class="row">
+        {% for result in results %}
+        <div class="col-md-2 mb-4">
+            <a href="{{ result.url }}"><h3>{{ result.title }}</h3></a>
+            <p>{{ result.company }} - {{ result.location }}</p>
+            <p>Salary: {{ result.salary }}</p>
+            <br>
+            <p>Description: {{ result.description }}</p>
+            <div class="form-check form-switch">
+                <input type="checkbox" class="favorite-checkbox" data-result-id="{{ result.id }}" {% if result.favorite %}checked{% endif %}>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const checkboxes = document.querySelectorAll('.favorite-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const resultId = this.getAttribute('data-result-id');
+            const isChecked = this.checked;
+
+            console.log(resultId)
+
+            fetch('/toggle_favorite', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    result_id: resultId
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Favorite toggled successfully');
+                } else {
+                    console.error('Failed to toggle favorite');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+});
+</script>
+{% endblock %}
