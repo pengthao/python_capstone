@@ -13,8 +13,13 @@
             <br>
             <p>Description: {{ result.description }}</p>
             <div class="form-check form-switch">
-                <input type="checkbox" class="favorite-checkbox" data-result-id="{{ result.id }}" {% if result.favorite %}checked{% endif %}>
-            </div>
+                <input class="form-check-input favorite-checkbox" 
+                    type="checkbox" 
+                    role="switch" 
+                    data-result-id="{{ result.id }}" 
+                    {% if result.favorite %}checked{% endif %}
+                    >
+              </div>
         </div>
         {% endfor %}
     </div>
