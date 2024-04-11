@@ -43,25 +43,26 @@ async def scrape_jobs(search_term, search_location, search_radius):
                     title = aTag.find("strong").string
                     href = aTag.get("href")
                     salary = job.find(class_="jobList-salary")
-                    salaryText = ""  
+                    salaryText = None
                     if salary:
                         salaryText = salary.get_text()
                     description = job.find(class_="jobList-description")
                     descriptionText = "" 
                     if description:
                         descriptionText = description.get_text()
-                    # Get the list date
+
                     list_date_str = job.find(class_="jobList-date").string.strip()
                     list_date = datetime.strptime(f"{list_date_str} {current_year}", '%d %b %Y').date()
                     
-                    # Check if the list date is greater than today
                     if list_date > today:
-                        # Subtract one year from the list date
                         list_date -= timedelta(days=365)
                     
                     short_date = list_date.strftime('%x')
 
                     company = job.find_next("li").get_text(strip=True)
+
+                    if salaryText == None:
+                        salaryText = "None Listed"
 
                     results_found[href] = {"title" : title, "company" : company, "salary" : salaryText, "list date" : short_date, "description" : descriptionText, "url" : href, "search_term": search_term}
                     

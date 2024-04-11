@@ -2,14 +2,11 @@
 
 {% block content %}
 <div class="jumbotron">
-    <h1>Job Hunter!</h1>
     {% if current_user.is_authenticated %}
-    <p>Hi {{current_user.username}}!</p>
-    
     {% else %}
     <p>Please login or register</p>
     {% endif %}
-
+    <br>
     <div class="d-flex flex-row justify-content-center p-2">
         <form action="" method="post">
             {{ form.hidden_tag() }}
@@ -17,11 +14,23 @@
                 {{ form.search_term(class="form-control") }}
                 {{ form.search_location(class="form-control") }}
                 {{ form.search_radius(class="form-control") }}
-            {{ form.submit(class="btn btn-primary d-flex justify-content-center") }}
+                {{ form.submit(class="btn btn-primary d-flex justify-content-center search_btn") }}
             </div>
         </form>
     </div>
     <br>
     <img class="container mx-auto" src="https://tinyurl.com/2uuvmj9w" alt="project tracker">
 </div>
+{% endblock %}
+
+{% block after_content %}
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const submitButton = document.querySelector(".search_btn");
+        submitButton.addEventListener("click", () => {
+            const loader = document.querySelector(".loader");
+            loader.classList.remove("loader-hidden");
+        });
+    });
+</script>
 {% endblock %}

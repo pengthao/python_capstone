@@ -8,8 +8,8 @@ from forms import searchForm
 from model import connect_to_db, db, login_manager, Job, User, UserJob
 from datetime import datetime
 from dotenv import load_dotenv
-import urllib.parse
 from scraper.mntech import scrape_jobs
+import urllib.parse
 
 app = Flask(__name__, static_folder='static')
 
@@ -37,9 +37,6 @@ def unauthorized():
 connect_to_db(app, db_uri)
 migrate = Migrate(app, db)
 
-@app.route('/test', methods=['GET', 'POST'])
-def test():
-    return redirect(url_for('users.login'))
 
 @app.route('/', methods=['GET', 'POST'])
 async def home():
@@ -49,8 +46,6 @@ async def home():
     if form.validate_on_submit():
         encoded_search = form.search_term.data.replace(' ','+')
         encoded_location = urllib.parse.quote(form.search_location.data)
-
-        print(f'encoded search {encoded_search}')
 
         results_found = await scrape_jobs(encoded_search, encoded_location, form.search_radius.data)
 
@@ -98,8 +93,6 @@ def view_jobs(search_term):
     return jsonify(results_json)
 
 
-
-
 @app.route('/results', methods=['POST'])
 def add_jobs():
     results = request.json.get('data')
@@ -123,12 +116,9 @@ def job_update(id):
 
 @app.route('/results/view_results/<search_term>')
 def view_results(search_term):
-    print(f"view results search term {search_term}")
+
     results = Job.query.filter_by(search_term=search_term).all()
-
     user_id = current_user.get_id()
-    #csrf_token = generate_csrf()
-
     favorite_jobs = {}
 
     if user_id:
@@ -138,8 +128,8 @@ def view_results(search_term):
     
     for result in results:
         result.favorite = favorite_jobs.get(result.id, False)
-
     return render_template('results.html', results=results, user_id=user_id)
+
 
 @app.route('/toggle_favorite', methods=['GET', 'POST'])
 @login_manager.unauthorized_handler
