@@ -43,6 +43,18 @@ def add_favorite(user_id, job_id):
     print('Adding to favorites')
     return user_job
 
+def update_favorite_job(user_id, job_id, status):
+    job = UserJob.query.filter_by(user_id=user_id, job_result_id=job_id).first()
+    
+    if job:
+        job.status = status
+        job.last_modified = datetime.now()
+        db.session.commit()
+        return jsonify({'message': 'Favorite updated successfully'}), 200
+    else:
+        return jsonify({'error': 'Job not found'}), 404
+
+
 
 
 

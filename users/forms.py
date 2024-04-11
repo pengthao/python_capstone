@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, ValidationError, IntegerField
+from wtforms import StringField, PasswordField, SubmitField, ValidationError, IntegerField, SelectField
 from wtforms.validators import DataRequired, EqualTo, Email
-from model import User
+from model import User, UserJob
 
 
 class LoginForm(FlaskForm):
@@ -30,3 +30,13 @@ class searchForm(FlaskForm):
     search_location = StringField('Location: ', validators=[DataRequired()])
     search_radius = IntegerField('Search Radius: ', validators=[DataRequired()])
     submit = SubmitField('submit')
+
+class updateStatus(FlaskForm):
+    status_choices = [(choice, choice) for choice in ['Interested', 'Applied', 'Accepted', 'Not Interested']]
+    status = SelectField('Status: ', validators=[DataRequired()], choices=status_choices)
+    submit = SubmitField('Update')
+
+    '''def __init__(self, *args, **kwargs):
+        super(updateStatus, self).__init__(*args, **kwargs)
+        enum_choices = [(choice.name, choice.value) for choice in UserJob.status.property.columns[0].type.enums]
+        self.status.choices = enum_choices'''
