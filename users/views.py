@@ -1,7 +1,8 @@
 import json
-from flask import Blueprint, render_template, redirect, request, url_for, flash , session
+from flask import Blueprint, render_template, redirect, request, url_for, flash , session, abort
 from flask_login import login_user, login_required, logout_user, current_user
 from flask_bcrypt import Bcrypt
+from flask_wtf.csrf import generate_csrf
 import urllib.parse
 from model import User, Job, UserJob, db
 from crud import create_job, update_job, update_favorite_job
@@ -111,14 +112,19 @@ def my_jobs():
     saved_jobs = UserJob.query.filter_by(user_id=user_id).all()
     job_results = []
     for job in saved_jobs:
-        job = Job.query.filter_by(id=job.job_result_id).first()
-        print(f"title {job.title}")
-        job_results.append(job)
+        job_result = Job.query.filter_by(id=job.job_result_id).first()
+        job_results.append((job_result))
+
     form = updateStatus()
-    #form.status.default = user_job.status
 
-    if form.validate_on_submit():
-        job_id = request.form.get('job_id')
-        update_favorite_job(user_id, job_id, form.status.data)
-
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            print("Form validated successfully")
+            job_id = request.form.get('job_id')
+            update_favorite_job(user_id, job_id, form.status.data)
+        else:
+            print("Form validation failed. Errors:")
+            for field, errors in form.errors.items():
+                for error in errors:
+                    print(f"Field '{field}': {error}")
     return render_template('my_jobs.html', form=form, job_results=job_results)

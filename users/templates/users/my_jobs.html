@@ -4,13 +4,16 @@
 
   <div class="row">
     {% for result in job_results %}
+    {% with _ = form.set_default_status(result.id) %}
+    {% endwith %}
     <div class="col-md-2 mb-4">
       <a href="{{ result.url }}"><h3>{{ result.title }}</h3></a>
       <p>{{ result.company }} - {{ result.location }}</p>
       <p>Salary: {{ result.salary }}</p>
       <br />
       <p>Description: {{ result.description }}</p>
-      {{form.status.label}} {{form.status()}}
+      <form method="POST">
+      {{ form.status.label }} {{ form.status() }}
       <div class="form-check form-switch">
         <input
           class="form-check-input favorite-checkbox"
@@ -20,12 +23,12 @@
           checked
         />
       </div>
+        {{ form.hidden_tag() }}
+        <input type="hidden" name="job_id" value="{{ result.id }}" />
+        {{form.submit()}}
+        </form>
     </div>
-    <form method="POST">
-      {{ form.hidden_tag() }}
-      <input type="hidden" name="job_id" value="{{ result.id }}" />
-      {{form.submit()}}
-    </form>
+
     {% endfor %}
   </div>
 </div>

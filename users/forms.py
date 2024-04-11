@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_login import current_user
 from wtforms import StringField, PasswordField, SubmitField, ValidationError, IntegerField, SelectField
 from wtforms.validators import DataRequired, EqualTo, Email
 from model import User, UserJob
@@ -31,12 +32,19 @@ class searchForm(FlaskForm):
     search_radius = IntegerField('Search Radius: ', validators=[DataRequired()])
     submit = SubmitField('submit')
 
-class updateStatus(FlaskForm):
+def status_choices():
     status_choices = [(choice, choice) for choice in ['Interested', 'Applied', 'Accepted', 'Not Interested']]
-    status = SelectField('Status: ', validators=[DataRequired()], choices=status_choices)
+    return status_choices
+
+class updateStatus(FlaskForm):
+    
+    status = SelectField('Status: ', choices=status_choices())
     submit = SubmitField('Update')
 
-    '''def __init__(self, *args, **kwargs):
-        super(updateStatus, self).__init__(*args, **kwargs)
-        enum_choices = [(choice.name, choice.value) for choice in UserJob.status.property.columns[0].type.enums]
-        self.status.choices = enum_choices'''
+    def set_default_status(self, job_id):
+            user_id = current_user.get_id()
+            saved_job = UserJob.query.filter_by(user_id=user_id, job_result_id=job_id).first()
+            if saved_job:
+                self.status.data = saved_job.status
+
+    

@@ -2,24 +2,19 @@
 
 {% block content %}
 <div class="jumbotron">
-    <div class="col-sm-4">
-        <form action="" method="post">
-            <ul class="list-group">
-                {{form.hidden_tag()}}
-                <li class="list-group-item">
-                    {{form.search_term.label}} {{form.search_term()}}
-                </li>
-                <li class="list-group-item">
-                    {{form.search_location.label}} {{form.search_location()}}
-                </li>
-                <li class="list-group-item">
-                    {{form.search_radius.label}} {{form.search_radius()}}
-                </li>
-                <li class="list-group-item">
-                    {{form.submit()}}
-                </li>
-            </ul>
-        </form>
+    <div class="row">
+        <div class="col-sm-12">
+            <form action="" method="post" class="form-inline">
+                {{ form.hidden_tag() }}
+                {{ form.search_term.label(class="sr-only") }}
+                {{ form.search_term(class="form-control mr-2") }}
+                {{ form.search_location.label(class="sr-only") }}
+                {{ form.search_location(class="form-control mr-2") }}
+                {{ form.search_radius.label(class="sr-only") }}
+                {{ form.search_radius(class="form-control mr-2") }}
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
     </div>
 
     <br>
