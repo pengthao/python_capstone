@@ -2,15 +2,12 @@ import json
 from flask import Blueprint, render_template, redirect, request, url_for, flash , session, abort
 from flask_login import login_user, login_required, logout_user, current_user
 from flask_bcrypt import Bcrypt
-from flask_wtf.csrf import generate_csrf
 import urllib.parse
 from model import User, Job, UserJob, db
 from crud import create_job, update_job, update_favorite_job
 from users.forms import LoginForm, RegistrationForm, searchForm, updateStatus
 from scraper.mntech import scrape_jobs
 from datetime import datetime
-
-
 
 bcrypt = Bcrypt()
 
@@ -63,29 +60,27 @@ async def welcome_user():
 @login_required
 def logout():
     logout_user()
+    session.clear()
     flash('You logged out!')
     return redirect(url_for('home'))
 
 
-
-@users_blueprint.route('/login', methods=['GET','POST'])
+@users_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
-
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user is not None and user.check_password(form.password.data):
-
             login_user(user)
-            flash('Logged in Successfully!')
+            flash('Logged in successfully!', 'success')
 
-            next = request.args.get('next')
+            next_url = request.args.get('next')
+            if next_url and next_url.startswith('/'):
+                return redirect(next_url)
+            return redirect(url_for('users.welcome_user'))
 
-            if next == None or not next[0] == '/':
-                next = url_for('users.welcome_user')
-
-            return redirect(next)
-        
+        else:
+            flash('Invalid email or password. Please try again.', 'error')
     return render_template('login.html', form=form)
     
 @users_blueprint.route('/register', methods = ['GET', 'POST'])

@@ -27,9 +27,9 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('Email already taken. Try again')
 
 class searchForm(FlaskForm):
-    search_term = StringField('Search: ', validators=[DataRequired()])
-    search_location = StringField('Location: ', validators=[DataRequired()])
-    search_radius = IntegerField('Search Radius: ', validators=[DataRequired()])
+    search_term = StringField('Search: ', validators=[DataRequired()], render_kw={"placeholder": "Enter search term"}, description='search_term')
+    search_location = StringField('Location: ', validators=[DataRequired()], render_kw={"placeholder": "Enter location"}, description='search_location')
+    search_radius = IntegerField('Search Radius: ', validators=[DataRequired()], render_kw={"placeholder": "Radius"}, description='search_radius')
     submit = SubmitField('submit')
 
 def status_choices():

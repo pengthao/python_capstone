@@ -9,6 +9,19 @@
     {% else %}
     <p>Please login or register</p>
     {% endif %}
+
+    <div class="d-flex flex-row justify-content-center p-2">
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <div class="input-group d-flex justify-content-center">
+                {{ form.search_term(class="form-control") }}
+                {{ form.search_location(class="form-control") }}
+                {{ form.search_radius(class="form-control") }}
+            {{ form.submit(class="btn btn-primary d-flex justify-content-center") }}
+            </div>
+        </form>
+    </div>
+    <br>
     <img class="container mx-auto" src="https://tinyurl.com/2uuvmj9w" alt="project tracker">
 </div>
 {% endblock %}

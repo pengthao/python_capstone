@@ -56,14 +56,6 @@ def update_favorite_job(user_id, job_id, status):
 
 
 
-
-
-
-
-
-
-
-
 if __name__ == '__main__':
     from app import app
     connect_to_db(app)
