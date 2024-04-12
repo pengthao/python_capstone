@@ -29,10 +29,6 @@ app.register_blueprint(users_blueprint, url_prefix='/users')
 
 login_manager.init_app(app)
 login_manager.login_view = 'users.login'
-@login_manager.unauthorized_handler
-def unauthorized():
-    flash('You must be logged in to access this page.', 'error')
-    return redirect(url_for('users.login'))
 
 connect_to_db(app, db_uri)
 migrate = Migrate(app, db)
@@ -122,14 +118,15 @@ def view_results(search_term):
 
 
 @app.route('/toggle_favorite', methods=['GET', 'POST'])
-@login_manager.unauthorized_handler
 def toggle_favorite():
     print(current_user.is_authenticated)
     if not current_user.is_authenticated:
         print('i am not authenticated')
         flash('You must be authenticated to perform this action.', 'error')
         print('after flash')
-        return redirect(url_for('users.login'))
+        our_redirect = redirect(url_for('home'))
+        print(f"our_redirect {our_redirect.direct_passthrough}")
+        return jsonify({'message': 'Invalid request, user_id and job_id are required'}), 400
   
     data = request.json
     user_id = current_user.get_id()

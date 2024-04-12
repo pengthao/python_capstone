@@ -26,6 +26,8 @@ def login():
         if user is not None and user.check_password(form.password.data):
             login_user(user)
             flash('Logged in successfully!', 'success')
+            red = redirect(url_for('users.login'))
+            print(f"red.response {red.response}")
 
             next_url = request.args.get('next')
             if next_url and next_url.startswith('/'):

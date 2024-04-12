@@ -2,38 +2,27 @@
 
 {% block content %}
 <div class="jumbotron container-fluid row flex">
-    <h5>Search Results</h5>
-    <table id="data" class="table table-striped">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Company</th>
-            <th>Location</th>
-            <th>Salary</th>
-            <th>Description</th>
-            <th>Favorites</th>
-          </tr>
-        </thead>
-        <tbody>
-            {% for result in results %}
-            <tr>
-              <td><a href="{{ result.url }}">{{ result.title }}</a></td>
-              <td>{{ result.company }}</td>
-              <td>{{ result.location }}</td>
-              <td>{{ result.salary }}</td>
-              <td>{{ result.description }}</td>
-              <td><div class="form-check form-switch">
+    <h1>Search Results</h1>
+
+    <div class="row">
+        {% for result in results %}
+        <div class="col-md-8 mb-4">
+            <a href="{{ result.url }}"><h5>{{ result.title }}</h5></a>
+            <p>Company: {{ result.company }}</p>
+            <p>Location: {{ result.location }}</p>
+            <p>Salary: {{ result.salary }}</p>
+            <p>Description: {{ result.description }}</p>
+            <div class="form-check form-switch">
                 <input class="form-check-input favorite-checkbox" 
                     type="checkbox" 
                     role="switch" 
                     data-result-id="{{ result.id }}" 
                     {% if result.favorite %}checked{% endif %}
                     >
-              </div></td>
-            </tr>
-          {% endfor %}
-        </tbody>
-    </table>
+              </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 
 <script>
@@ -59,8 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (response.ok) {
                     console.log('Favorite toggled successfully');
                 } else {
-                    alert('Please log in to add favorites!')
-                    window.location.href = '/users/login';
+                    console.error('Failed to toggle favorite');
                 }
             })
             .catch(error => {
