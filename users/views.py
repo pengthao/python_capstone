@@ -59,6 +59,15 @@ def my_jobs():
     user_id = current_user.get_id()
     saved_jobs = UserJob.query.filter_by(user_id=user_id).all()
     job_results = []
+
+    sort_option = request.args.get('sort')
+
+    if sort_option == 'recent':
+        saved_jobs.sort(key=lambda x: x.last_modified, reverse=True)
+    elif sort_option == 'status':
+        saved_jobs.sort(key=lambda x: x.status)
+    
+
     for job in saved_jobs:
         job_result = Job.query.filter_by(id=job.job_result_id).first()
         job_results.append((job_result))

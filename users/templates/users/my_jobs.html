@@ -1,16 +1,23 @@
 {% extends 'base.html' %} {% block content %}
 <div class="jumbotron container-fluid row flex">
   <h1>Favorites</h1>
-
+  <form method="GET" action="{{ url_for('users.my_jobs') }}">
+    <label for="sort">Sort by:</label>
+    <select name="sort" id="sort">
+      <option value="recent">Last Modified</option>
+      <option value="status">Status</option>
+    </select>
+    <button type="submit">Apply</button>
+  </form>
   <div class="row">
     {% for result in job_results %}
     {% with _ = form.set_default_status(result.id) %}
     {% endwith %}
     <div class="col-md-2 mb-4">
       <a href="{{ result.url }}"><h3>{{ result.title }}</h3></a>
-      <p>{{ result.company }} - {{ result.location }}</p>
+      <p>Company: {{ result.company }}</p>
+      <p>Location: {{ result.location }}</p>
       <p>Salary: {{ result.salary }}</p>
-      <br />
       <p>Description: {{ result.description }}</p>
       <form method="POST">
       {{ form.status.label }} {{ form.status() }}

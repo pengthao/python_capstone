@@ -3,11 +3,12 @@ from datetime import datetime
 from flask import request, jsonify
 
 
-def create_job(title, company, location, url, description, search_term):
+def create_job(title, company, salary, location, url, description, search_term):
     
     job = Job(
             title=title,
             company=company,
+            salary=salary,
             location=location,
             url=url,
             description=description,

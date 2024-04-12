@@ -40,7 +40,7 @@ migrate = Migrate(app, db)
 
 @app.route('/', methods=['GET', 'POST'])
 async def home():
-
+    search_term = session.get('search_term')
     form = searchForm()
 
     if form.validate_on_submit():
@@ -62,12 +62,13 @@ async def home():
                 
                 title = data['title']
                 company = data['company']
+                salary = data['salary']
                 location = encoded_location
                 description = data['description']
                 url = data['url']
                 search_term = encoded_search
 
-                job = create_job(title, company, location, url, description, search_term)
+                job = create_job(title, company, salary, location, url, description, search_term)
                 print('success')
                 print(data)
                 db.session.add(job)
@@ -80,17 +81,6 @@ async def home():
 def error_404(e):
    return render_template("404.html")
 
-
-@app.route('/results/<search_term>')
-def view_jobs(search_term):
-
-    results = get_jobs(search_term)
-    results_json = []
-
-    for result in results:
-        results_json.append(result.json())
-
-    return jsonify(results_json)
 
 
 @app.route('/results', methods=['POST'])
@@ -114,7 +104,7 @@ def job_update(id):
         return jsonify({'message': 'Job updated successfully'}), 200
 
 
-@app.route('/results/view_results/<search_term>')
+@app.route('/view_results/<search_term>')
 def view_results(search_term):
 
     results = Job.query.filter_by(search_term=search_term).all()
@@ -140,7 +130,7 @@ def toggle_favorite():
         flash('You must be authenticated to perform this action.', 'error')
         print('after flash')
         return redirect(url_for('users.login'))
-    
+  
     data = request.json
     user_id = current_user.get_id()
     job_id = data.get('result_id')
@@ -167,7 +157,6 @@ def toggle_favorite():
         db.session.add(user_job)
         db.session.commit()
         return jsonify({'message': 'Favorite added successfully'}), 200
-    
 
 
 if __name__=='__main__':

@@ -43,9 +43,11 @@ async def scrape_jobs(search_term, search_location, search_radius):
                     title = aTag.find("strong").string
                     href = aTag.get("href")
                     salary = job.find(class_="jobList-salary")
+                    print(f"salary{salary}")
                     salaryText = None
                     if salary:
                         salaryText = salary.get_text()
+                    print(f"salarytext{salaryText}")
                     description = job.find(class_="jobList-description")
                     descriptionText = "" 
                     if description:

@@ -50,15 +50,17 @@ class Job(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255), nullable=False)
     company = db.Column(db.String(255), nullable=False)
+    salary = db.Column(db.String(255))
     location = db.Column(db.String(255), nullable=False)
     url = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, server_default=db.func.current_timestamp())
     search_term = db.Column(db.String(255), nullable=False)
     
-    def __init__(self, title, company, location, url, description, created_at, search_term):
+    def __init__(self, title, company, salary, location, url, description, created_at, search_term):
         self.title = title
         self.company = company
+        self.salary = salary
         self.location = location
         self.url = url
         self.description = description
