@@ -1,22 +1,33 @@
-{% extends 'base.html' %}
-
-{% block content %}
-    <div class="row">
-        <div class="col-sm-3">
-            <form class="col"action="" method="post">
-                <ul class="list-group">
-                    {{form.hidden_tag()}}
-                    <li class="list-group-item">
-                        {{form.email.label}} {{form.email()}}
-                    </li>
-                    <li class="list-group-item">
-                        {{form.password.label}} {{form.password()}}
-                    </li>
-                    <li class="list-group-item">
-                        {{form.submit()}}
-                    </li>
-                </ul>
-            </form>
+{% extends 'base.html' %} {% block content %}
+<div class="content-well">
+<div class="row d-flex justify-content-center">
+    <div class="col-sm-6 col-sm-offset-3">
+        <div class="panel panel-default panel-expand ">
+            <div class="panel-heading">
+                <h4>Log In</h4>
+            </div>
+            <div class="panel-body">
+                <form class="login" id="login_form" action="/users/login" accept-charset="UTF-8" method="post">
+                    <div class="form-group">
+                        {{ form.email.label }} 
+                        {{ form.email(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.password.label }} 
+                        {{ form.password(class="form-control") }}
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <div class="actions clearfix">
+                            {{ form.submit(class="btn btn-lg btn-success pull-right") }}
+                        </div>
+                    </div>
+                </form>
+                <a href="/users/login">Register</a><br>
+            </div>
         </div>
     </div>
+</div>
+</div>
+
 {% endblock %}
