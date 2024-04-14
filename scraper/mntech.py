@@ -1,11 +1,8 @@
 from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
 from playwright.async_api import async_playwright
-import urllib.parse
-import asyncio
 import json
 import os
-import re
 
 async def scrape_jobs(search_term, search_location, search_radius):
     def load_auth():
@@ -20,11 +17,11 @@ async def scrape_jobs(search_term, search_location, search_radius):
 
     results_found = {}
     today = datetime.now().date()
-    current_year = datetime.now().year  # Get the current year
+    current_year = datetime.now().year
 
     async with async_playwright() as pw:
         print('Connecting to browser.')
-        browser = await pw.chromium.connect_over_cdp(browser_url) #my proxy
+        browser = await pw.chromium.connect_over_cdp(browser_url)
         page = await browser.new_page()
         pages = 2
         print("Connected.")
@@ -43,11 +40,9 @@ async def scrape_jobs(search_term, search_location, search_radius):
                     title = aTag.find("strong").string
                     href = aTag.get("href")
                     salary = job.find(class_="jobList-salary")
-                    print(f"salary{salary}")
                     salaryText = None
                     if salary:
                         salaryText = salary.get_text()
-                    print(f"salarytext{salaryText}")
                     description = job.find(class_="jobList-description")
                     descriptionText = "" 
                     if description:

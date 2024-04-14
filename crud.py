@@ -1,6 +1,6 @@
-from model import db, User, Job, UserJob, connect_to_db
-from datetime import datetime
 from flask import request, jsonify
+from model import db, Job, UserJob, connect_to_db
+from datetime import datetime
 
 
 def create_job(title, company, salary, location, url, description, search_term):
@@ -19,6 +19,7 @@ def create_job(title, company, salary, location, url, description, search_term):
     print('im adding you in')
     return job
 
+
 def update_job(id, data):
     data = request.json
     existing_job = Job.query.get_or_404(id)
@@ -28,9 +29,11 @@ def update_job(id, data):
     existing_job.location = data['location']
     existing_job.description = data['description']
 
+
 def get_jobs(search_term):
     similar_jobs = Job.query.filter(Job.search_term.ilike(f"%{search_term}%")).all()
     return similar_jobs
+
 
 
 def add_favorite(user_id, job_id):
@@ -44,17 +47,24 @@ def add_favorite(user_id, job_id):
     print('Adding to favorites')
     return user_job
 
+
 def update_favorite_job(user_id, job_id, status):
     job = UserJob.query.filter_by(user_id=user_id, job_result_id=job_id).first()
-    
-    if job:
+
+    if status == "Not Interested":
+        if job:
+            db.session.delete(job)
+            db.session.commit()
+            return jsonify({'message': 'Favorite removed successfully'}), 200
+        else:
+            return jsonify({'error': 'Job not found'}), 404
+    elif job:
         job.status = status
         job.last_modified = datetime.now()
         db.session.commit()
         return jsonify({'message': 'Favorite updated successfully'}), 200
     else:
         return jsonify({'error': 'Job not found'}), 404
-
 
 
 if __name__ == '__main__':

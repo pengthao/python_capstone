@@ -1,10 +1,6 @@
 from flask_bcrypt import Bcrypt, generate_password_hash
-from flask_restful import Resource, Api
 from flask_login import UserMixin, LoginManager
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Enum
-
-from flask_migrate import Migrate
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
@@ -23,7 +19,7 @@ class User(UserMixin, db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(255), unique=True, nullable=False)
+    username = db.Column(db.String(255), unique=False, nullable=False)
     email = db.Column(db.String(255), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
 
@@ -87,30 +83,6 @@ class UserJob(db.Model):
 
     user = db.relationship('User', backref=db.backref('user_jobs', lazy=True))
     job_result = db.relationship('Job', backref=db.backref('user_jobs', lazy=True))
-
-
-class UserTrackedSearch(db.Model):
-    __tablename__ = "user_tracked_searches"
-
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    search = db.Column(db.Integer, nullable=False)  # Assuming this is the search term or identifier
-    created_at = db.Column(db.DateTime, nullable=False, default=db.func.current_timestamp())
-
-    user = db.relationship('User', backref=db.backref('user_tracked_searches', lazy=True))
-
-
-class JobResultTracked(db.Model):
-    __tablename__ = "job_results_tracked"
-
-    id = db.Column(db.Integer, primary_key=True)
-    job_result_id = db.Column(db.Integer, db.ForeignKey('job_results.id'), nullable=False)
-    tracked_search_id = db.Column(db.Integer, db.ForeignKey('user_tracked_searches.id'), nullable=False)
-    created_at = db.Column(db.DateTime, nullable=False, default=db.func.current_timestamp())
-
-    job_result = db.relationship('Job', backref=db.backref('job_results_tracked', lazy=True))
-    tracked_search = db.relationship('UserTrackedSearch', backref=db.backref('job_results_tracked', lazy=True))
-
 
 
 def connect_to_db(flask_app, db_uri=None, echo=False):

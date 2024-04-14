@@ -1,36 +1,43 @@
-{% extends 'base.html' %}
-
-{% block content %}
-<div class="jumbotron">
-    {% if current_user.is_authenticated %}
-    {% else %}
-    <p>Please login or register</p>
-    {% endif %}
-    <br>
+{% extends 'base.html' %} {% block content %}
+<div class="search-image row align-items-center">
+  <div class="container position-relative text-center text-white">
+    <h1 class="fst-bold p-4">JobSearch Solutions</h1>
     <div class="d-flex flex-row justify-content-center p-2">
-        <form action="" method="post">
-            {{ form.hidden_tag() }}
-            <div class="input-group d-flex justify-content-center">
-                {{ form.search_term(class="form-control") }}
-                {{ form.search_location(class="form-control") }}
-                {{ form.search_radius(class="form-control") }}
-                {{ form.submit(class="btn btn-primary d-flex justify-content-center search_btn") }}
-            </div>
-        </form>
+      <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <div class="input-group d-flex justify-content-center">
+          {{ form.search_term(class="form-control") }} {{
+          form.search_location(class="form-control") }} {{
+          form.search_radius(class="form-control") }} {{ form.submit(class="btn
+          btn-primary d-flex justify-content-center search_btn") }}
+        </div>
+      </form>
     </div>
-    <br>
-    <img class="container mx-auto" src="https://tinyurl.com/2uuvmj9w" alt="project tracker">
+    {% if current_user.is_authenticated %} {% else %}
+    <p class="fst-italic">*Login or Register to Save to Favorites!</p>
+    {% endif %}
+  </div>
 </div>
-{% endblock %}
-
-{% block after_content %}
+{% endblock %} {% block after_content %}
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const submitButton = document.querySelector(".search_btn");
-        submitButton.addEventListener("click", () => {
-            const loader = document.querySelector(".loader");
-            loader.classList.remove("loader-hidden");
-        });
+  document.addEventListener("DOMContentLoaded", () => {
+    const submitButton = document.querySelector(".search_btn");
+    submitButton.addEventListener("click", () => {
+      const searchTerm = document.querySelector("#search_term").value.trim();
+      const searchLocation = document
+        .querySelector("#search_location")
+        .value.trim();
+      const searchRadius = document
+        .querySelector("#search_radius")
+        .value.trim();
+
+      if (searchTerm !== "" && searchLocation !== "" && searchRadius !== "") {
+        const loader = document.querySelector(".loader");
+        loader.classList.remove("loader-hidden");
+      } else {
+        alert("Please fill in all fields before searching.");
+      }
     });
+  });
 </script>
 {% endblock %}

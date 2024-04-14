@@ -1,0 +1,5 @@
+{
+    "DEBUG": "False",
+    "SECRET_KEY": "'a_secret_key'",
+    "DB_URI" : "postgresql://username:password@localhost/database_name"
+  }

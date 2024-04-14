@@ -1,33 +1,39 @@
 {% extends 'base.html' %} {% block content %}
-<div class="content-well">
-<div class="row d-flex justify-content-center">
-    <div class="col-sm-6 col-sm-offset-3">
-        <div class="panel panel-default panel-expand ">
-            <div class="panel-heading">
-                <h4>Log In</h4>
+
+<div class="container align-items-center">
+  <div class="row d-flex justify-content-center">
+    <div class="col-sm-5 col-sm-offset-3">
+      <div class="card card-default card-expand shadow-lg">
+        <h4 class="card-header">Log In</h4>
+
+        <div class="card-body">
+          <form
+            class="login"
+            id="login_form"
+            action="/users/login"
+            accept-charset="UTF-8"
+            method="post"
+          >
+            {{form.hidden_tag()}}
+            <div class="form-group">
+              {{ form.email.label }} {{ form.email(class="form-control") }}
             </div>
-            <div class="panel-body">
-                <form class="login" id="login_form" action="/users/login" accept-charset="UTF-8" method="post">
-                    <div class="form-group">
-                        {{ form.email.label }} 
-                        {{ form.email(class="form-control") }}
-                    </div>
-                    <div class="form-group">
-                        {{ form.password.label }} 
-                        {{ form.password(class="form-control") }}
-                    </div>
-                    <br>
-                    <div class="form-group">
-                        <div class="actions clearfix">
-                            {{ form.submit(class="btn btn-lg btn-success pull-right") }}
-                        </div>
-                    </div>
-                </form>
-                <a href="/users/login">Register</a><br>
+            <div class="form-group">
+              {{ form.password.label }} {{ form.password(class="form-control")
+              }}
             </div>
+            <br />
+            <div class="form-group">
+              <div class="actions clearfix">
+                {{ form.submit(class="btn btn-success pull-right") }}
+              </div>
+            </div>
+          </form>
+          <a class="register-link" href="/users/register">Register</a><br />
         </div>
+      </div>
     </div>
-</div>
+  </div>
 </div>
 
 {% endblock %}

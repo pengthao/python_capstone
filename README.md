@@ -7,15 +7,21 @@ This project provides a user interface to interact with a web scraper. Currently
 This project uses:
 
 - Flask
+- Flask - login_manager
+- Flask - Blueprints
+- FlaskForms
+- Jinja
 - Playwright
 - Bright Data (Web Scraping Browser)
 - Beautiful Soup
-- FlaskForm~WTForms
-- Jinja
+- Bcrypt
+- Postgres
+- SQLAlchemy
+
 
 ## Using the Scraper
 
-Install all dependencies, create the `auth.json` file, start the flask backend, run the react frontend and interact with the tool.
+Install all dependencies, create the `auth.json`and `config.json` file, start the flask app.
 
 ### auth.json
 
@@ -23,7 +29,6 @@ In the scraper directory fill in your [Bright Data Scraping Browser](https://bri
 
 ### Python Flask Backend
 
-- `cd backend`
 - `pip install -r requirements.txt`
 - `playwright install`
 - `python app.py` or `python3 app.py`

@@ -1,28 +1,41 @@
-{% extends 'base.html' %}
-
-{% block content %}
-    <div class="row">
-        <div class="col-sm-4">
-        <form action="" method="post">
-            <ul class="list-group">
-                {{form.hidden_tag()}}
-                <li class="list-group-item">
-                    {{form.username.label}} {{form.username()}}
-                </li>
-                <li class="list-group-item">
-                    {{form.email.label}} {{form.email()}}
-                </li>
-                <li class="list-group-item">
-                    {{form.password.label}} {{form.password()}}
-                </li>
-                <li class="list-group-item">
-                    {{form.pass_confirm.label}} {{form.pass_confirm()}}
-                </li>
-                <li class="list-group-item">
-                    {{form.submit()}}
-                </li>
-            </ul>
-        </form>
+{% extends 'base.html' %} {% block content %}
+<div class="container">
+  <div class="row d-flex justify-content-center">
+    <div class="col-sm-5 col-sm-offset-3">
+      <div class="card card-default card-expand shadow-lg">
+        <h4 class="card-header">Register</h4>
+        <div class="card-body">
+          <form
+            class="register"
+            id="register_form"
+            action="/users/register"
+            accept-charset="UTF-8"
+            method="post"
+          >
+            {{form.hidden_tag()}}
+            <div class="form-group">
+              {{form.username.label}} {{form.username(class="form-control")}}
+            </div>
+            <div class="form-group">
+              {{form.email.label}} {{form.email(class="form-control")}}
+            </div>
+            <div class="form-group">
+              {{form.password.label}} {{form.password(class="form-control")}}
+            </div>
+            <div class="form-group">
+              {{form.pass_confirm.label}}
+              {{form.pass_confirm(class="form-control")}}
+            </div>
+            <br />
+            <div class="form-group">
+              <div class="actions clearfix">
+                {{ form.submit(class="btn btn-success pull-right") }}
+              </div>
+            </div>
+          </form>
         </div>
+      </div>
     </div>
-{% endblock %}
+  </div>
+  {% endblock %}
+</div>

@@ -1,0 +1,5 @@
+{
+    "host": "proxy_host,
+    "username": "proxy_username",
+    "password": "proxy_password"
+  }

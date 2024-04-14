@@ -1,15 +1,15 @@
-import os
-import json
-from crud import create_job, update_job, get_jobs, add_favorite
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for, flash
+from flask_login import current_user
 from flask_migrate import Migrate
-from flask_login import login_required, current_user
 from forms import searchForm
-from model import connect_to_db, db, login_manager, Job, User, UserJob
-from datetime import datetime
-from dotenv import load_dotenv
+from model import connect_to_db, db, login_manager, Job, UserJob
+from crud import create_job, update_job
 from scraper.mntech import scrape_jobs
+from dotenv import load_dotenv
+from datetime import datetime
 import urllib.parse
+import json
+import os
 
 app = Flask(__name__, static_folder='static')
 
@@ -41,9 +41,12 @@ async def home():
 
     if form.validate_on_submit():
         encoded_search = form.search_term.data.replace(' ','+')
-        encoded_location = urllib.parse.quote(form.search_location.data)
+        encoded_location = ''.join(e for e in form.search_location.data if e.isalnum() or e.isspace())
+        encoded_location = urllib.parse.quote(encoded_location)
+        print(encoded_location)
 
         results_found = await scrape_jobs(encoded_search, encoded_location, form.search_radius.data)
+
 
         for href, data in results_found.items():
             existing_job = Job.url_exists(href)
@@ -59,7 +62,7 @@ async def home():
                 title = data['title']
                 company = data['company']
                 salary = data['salary']
-                location = encoded_location
+                location = form.search_location.data
                 description = data['description']
                 url = data['url']
                 search_term = encoded_search
@@ -76,7 +79,6 @@ async def home():
 @app.errorhandler(404)
 def error_404(e):
    return render_template("404.html")
-
 
 
 @app.route('/results', methods=['POST'])
@@ -102,8 +104,10 @@ def job_update(id):
 
 @app.route('/view_results/<search_term>')
 def view_results(search_term):
+    page = request.args.get('page', 1, type=int)
+    per_page = 10
 
-    results = Job.query.filter_by(search_term=search_term).all()
+    results = Job.query.filter_by(search_term=search_term).paginate(page=page, per_page=per_page)
     user_id = current_user.get_id()
     favorite_jobs = {}
 
@@ -112,26 +116,17 @@ def view_results(search_term):
         for job in user_jobs:
             favorite_jobs[job.job_result_id] = job.favorite
     
-    for result in results:
+    for result in results.items:  # Note the change to results.items to iterate over the items
         result.favorite = favorite_jobs.get(result.id, False)
-    return render_template('results.html', results=results, user_id=user_id)
+    return render_template('results.html', results=results, user_id=user_id, search_term=search_term)
 
 
 @app.route('/toggle_favorite', methods=['GET', 'POST'])
 def toggle_favorite():
-    print(current_user.is_authenticated)
-    if not current_user.is_authenticated:
-        print('i am not authenticated')
-        flash('You must be authenticated to perform this action.', 'error')
-        print('after flash')
-        our_redirect = redirect(url_for('home'))
-        print(f"our_redirect {our_redirect.direct_passthrough}")
-        return jsonify({'message': 'Invalid request, user_id and job_id are required'}), 400
   
     data = request.json
     user_id = current_user.get_id()
     job_id = data.get('result_id')
-    print(user_id)
 
     if job_id is None:
         return jsonify({'message': 'Invalid request, user_id and job_id are required'}), 400
