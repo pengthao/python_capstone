@@ -44,9 +44,7 @@ async def home():
         encoded_search = form.search_term.data.replace(' ','+')
         encoded_location = ''.join(e for e in form.search_location.data if e.isalnum() or e.isspace())
         encoded_location = urllib.parse.quote(encoded_location)
-        print(encoded_location)
 
-        #results_found = await scrape_jobs(encoded_search, encoded_location, form.search_radius.data)
         hiretech_results = await scrape_hireTech(encoded_search)
         mntech_results = await scrape_jobs(encoded_search, encoded_location, form.search_radius.data)
         results_found = hiretech_results.copy()
@@ -54,13 +52,11 @@ async def home():
 
         for href, data in results_found.items():
             existing_job = Job.url_exists(href)
+            print("Existing job:", existing_job)
             if existing_job:
                 existing_job_id = int(existing_job.id)
-                print(existing_job_id)
-                if existing_job.title != data['title'] or existing_job.company != data['company'] or existing_job.location != data['location'] or existing_job.description != data['description']:
+                if existing_job.title != data['title'] or existing_job.company != data['company'] or existing_job.description != data['description']:
                     update_job(existing_job_id, data)
-
-                print(data.id)
             else:
                 
                 title = data['title']
@@ -73,7 +69,6 @@ async def home():
 
                 job = create_job(title, company, salary, location, url, description, search_term)
                 print('success')
-                print(data)
                 db.session.add(job)
 
             db.session.commit()

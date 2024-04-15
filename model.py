@@ -68,7 +68,7 @@ class Job(db.Model):
     
     @classmethod
     def url_exists(cls, url):
-        return cls.query.filter_by(url=url).first() is not None
+        return cls.query.filter_by(url=url).first()
 
 class UserJob(db.Model):
     __tablename__ = "user_jobs"
