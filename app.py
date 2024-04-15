@@ -5,6 +5,7 @@ from forms import searchForm
 from model import connect_to_db, db, login_manager, Job, UserJob
 from crud import create_job, update_job
 from scraper.mntech import scrape_jobs
+from scraper.hireTech import scrape_hireTech
 from dotenv import load_dotenv
 from datetime import datetime
 import urllib.parse
@@ -45,8 +46,11 @@ async def home():
         encoded_location = urllib.parse.quote(encoded_location)
         print(encoded_location)
 
-        results_found = await scrape_jobs(encoded_search, encoded_location, form.search_radius.data)
-
+        #results_found = await scrape_jobs(encoded_search, encoded_location, form.search_radius.data)
+        hiretech_results = await scrape_hireTech(encoded_search)
+        mntech_results = await scrape_jobs(encoded_search, encoded_location, form.search_radius.data)
+        results_found = hiretech_results.copy()
+        results_found.update(mntech_results)
 
         for href, data in results_found.items():
             existing_job = Job.url_exists(href)
