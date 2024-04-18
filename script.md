@@ -1,5 +1,5 @@
 # Intro
-    Hi, my name is Peng,  Having worked as a data analyst, I'm excited to leverage my skills as I journey into software development. This Python programming class has been a lot of un, and I'm looking forward to learning more. To continue my growth, I find myself looking for new opportunities. I thought I would create an application that could help me with finding a job.
+    Hi, my name is Peng,  Having worked as a data analyst, I'm excited to leverage my skills as I journey into software development. This Python programming class has been a lot of fun, and I'm looking forward to learning more. To continue my growth, I find myself looking for new opportunities. I thought I would create an application that could help me with finding a job.
 
 ## Elevator Pitch
     My capstone project aims to centralize job searches by scraping the postings from multiple sites and aggregating them into one location where you can more easily manage them. You can select your favorite listings and update your current interest or application status here.
@@ -7,15 +7,15 @@
 ## Demo
     This application is built using python's Flask framework and the loginManager, Blueprints, and FlaskForms extensions.
 
-    The loginManager decorates my functions that manage access to certain functions. We can register and log in to access these features. 
+    The loginManager decorates my functions that manage access to certain features. We can register and log in to access these features. 
 
-    The password is encrypted using the bcrypt extension which generates a hash and salts the password entered and saves it to the postgres database. Upon login the password entered submitted is salted and compared to see if we should be authenticated.
+    The password is encrypted using the bcrypt extension which generates a hash and salts the password entered and saves it to the postgres database. Upon login the password  submitted is salted and compared to see if we should be authenticated.
 
-    Once we're logged in we have access to the myJobs link above that shows us jobs that we select as our favorites. We are redirected to our search page where we can search using keywords, location and radius of your search.
+    Once we're logged in we have access to the myJobs link above that shows us jobs that we have selected as our favorites. We are redirected to our search page where we can search using keywords, location and radius of your search.
 
-    I'll test python, minneapolis, 5 miles
+    I'll test with python, minneapolis, 5 miles
 
-    I built a css loading animation spin while we wait since the scraping takes a bit of time to gather the jobs.
+    I built a spinning animation in css to let the user know the program is thinking while we wait since the scraping takes a bit of time to gather all the jobs.
 
     This search engine goes through a proxy browser called Bright Data to bypass anti-bot measures and pulls the html of the target site using Playwright. From there I use Beautiful Soup to parse through the HTML to extract the data and send it to my database. 
     
